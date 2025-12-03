@@ -1,30 +1,23 @@
 ﻿namespace TicTacToe.Core;
 
-public sealed class Engine : IEngine
+public class Engine : IEngine
 {
-    private readonly IGameState _state;
+    public GameState State { get; private set; } = new();
 
-    public Engine(IGameState state)
-    {
-        _state = state;
-        _state.Reset();
-    }
-
-    public event EventHandler<string>? OnGameWin;
+    public event EventHandler<Player>? OnGameWin;
     public event EventHandler<EventArgs>? OnGameOver;
 
-    public void SetCell(int x, int y)
+    public void SetCell(int index)
     {
-        if (_state.Board[x][y] != null)
+        if (State.Board[index] != null)
         {
             return;
         }
-        
-        _state.Board[x][y] = _state.CurrentPlayer;
+
+        State.Board[index] = State.CurrentPlayer;
         if (CheckWin())
         {
-            var currentPlayerName = _state.CurrentPlayer ==  Constants.PlayerOne ? "Player One" : "Player Two";
-            OnGameWin?.Invoke(this, currentPlayerName);
+            OnGameWin?.Invoke(this, State.CurrentPlayer);
             return;
         }
 
@@ -33,44 +26,31 @@ public sealed class Engine : IEngine
             OnGameOver?.Invoke(this, EventArgs.Empty);
             return;
         }
-        
-        _state.CurrentPlayer = _state.CurrentPlayer == Constants.PlayerOne ? Constants.PlayerTwo : Constants.PlayerOne;
+
+        State.CurrentPlayer = State.CurrentPlayer switch
+        {
+            Player.One => Player.Two,
+            Player.Two => Player.One
+        };
     }
 
-    public void Reset() => _state.Reset();
-    
-    private bool CheckWin()
-    {
-        for (var x = 0; x < 3; x++)
-        {
-            // Rows
-            if (_state.Board[x].Count(cell => cell == _state.CurrentPlayer) == 3)
-            {
-                return true;
-            }
+    public void Reset() => State = new GameState();
 
-            // Columns
-            if (_state.Board[0][x] == _state.CurrentPlayer && _state.Board[1][x] == _state.CurrentPlayer && _state.Board[2][x] == _state.CurrentPlayer)
-            {
-                return true;
-            }
-        }
+    private static readonly int[][] WinConditions =
+    [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
 
-        // Left Diagonal
-        if (_state.Board[0][0] == _state.CurrentPlayer && _state.Board[1][1] == _state.CurrentPlayer && _state.Board[2][2] == _state.CurrentPlayer)
-        {
-            return true;
-        }
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
 
-        // Right Diagonal
-        if (_state.Board[0][2] == _state.CurrentPlayer && _state.Board[1][1] == _state.CurrentPlayer && _state.Board[2][0] == _state.CurrentPlayer)
-        {
-            return true;
-        }
-        
-        
-        return false;
-    }
+        [0, 4, 8],
+        [2, 4, 6]
+    ];
 
-    private bool CheckGameOver() => _state.Board.SelectMany(cell => cell).All(cell => cell != null);
+    internal bool CheckWin() => WinConditions.Any(w => new[] { State.Board[w[0]], State.Board[w[1]], State.Board[w[2]] }.All(p => p == State.CurrentPlayer));
+
+    internal bool CheckGameOver() => State.Board.All(c => c != null);
 }

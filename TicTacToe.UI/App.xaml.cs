@@ -10,7 +10,7 @@ namespace TicTacToe.UI;
 /// </summary>
 public partial class App
 {
-    private IServiceProvider ServiceProvider { get; set; }
+    private IServiceProvider ServiceProvider { get; }
 
     public App()
     {
@@ -18,7 +18,6 @@ public partial class App
         services.AddSingleton<IEngine, Engine>();
         services.AddSingleton<MainWindow>();
         services.AddSingleton<MainWindowViewModel>();
-        services.AddSingleton<IGameState, GameStateViewModel>();
         ServiceProvider = services.BuildServiceProvider();
     }
     

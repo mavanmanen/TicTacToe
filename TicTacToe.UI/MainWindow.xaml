@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:system="clr-namespace:System;assembly=System.Core"
         xmlns:vm="clr-namespace:TicTacToe.UI.ViewModels"
+        xmlns:core="clr-namespace:TicTacToe.Core;assembly=TicTacToe.Core"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         Title="Tac-Tac-Toe" Height="auto" Width="auto" ResizeMode="NoResize" SizeToContent="WidthAndHeight"
@@ -14,7 +15,7 @@
         <system:Double x:Key="CellSize">120</system:Double>
         <system:Double x:Key="FontSize">20</system:Double>
         
-        <Style x:Key="CellStyle" TargetType="{x:Type Button}">
+        <Style x:Key="CellStyle" TargetType="Button">
             <Style.Setters>
                 <Setter Property="Height" Value="{StaticResource CellSize}"/>
                 <Setter Property="Width" Value="{StaticResource CellSize}"/>
@@ -23,15 +24,19 @@
             </Style.Setters>
             
             <Style.Triggers>
-                <Trigger Property="Content" Value="X">
+                <Trigger Property="Tag" Value="{x:Static core:Player.One}">
                     <Setter Property="Foreground" Value="Red"/>
+                    <Setter Property="Content" Value="X"/>
                 </Trigger>
-                <Trigger Property="Content" Value="O">
+                
+                <Trigger Property="Tag" Value="{x:Static core:Player.Two}">
                     <Setter Property="Foreground" Value="Blue"/>
+                    <Setter Property="Content" Value="O"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
     </Window.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -55,16 +60,16 @@
             <Label Grid.Column="1" FontSize="{StaticResource FontSize}" Content="{Binding GameState.CurrentPlayer}"/>
         </Grid>
         
-        <Button Grid.Row="1" Grid.Column="0" Style="{StaticResource CellStyle}" BorderThickness="0,1,1,1" CommandParameter="0,0" Command="{Binding CellClickCommand}" Content="{Binding GameState.Board[0][0]}"/>
-        <Button Grid.Row="1" Grid.Column="1" Style="{StaticResource CellStyle}" BorderThickness="0,1,1,1" CommandParameter="0,1" Command="{Binding CellClickCommand}" Content="{Binding GameState.Board[0][1]}"/>
-        <Button Grid.Row="1" Grid.Column="2" Style="{StaticResource CellStyle}" BorderThickness="0,1,0,1" CommandParameter="0,2" Command="{Binding CellClickCommand}" Content="{Binding GameState.Board[0][2]}"/>
+        <Button Grid.Row="1" Grid.Column="0" Style="{StaticResource CellStyle}" BorderThickness="0,1,1,1" CommandParameter="0" Command="{Binding CellClickCommand}" Tag="{Binding GameState.Board[0]}"/>
+        <Button Grid.Row="1" Grid.Column="1" Style="{StaticResource CellStyle}" BorderThickness="0,1,1,1" CommandParameter="1" Command="{Binding CellClickCommand}" Tag="{Binding GameState.Board[1]}"/>
+        <Button Grid.Row="1" Grid.Column="2" Style="{StaticResource CellStyle}" BorderThickness="0,1,0,1" CommandParameter="2" Command="{Binding CellClickCommand}" Tag="{Binding GameState.Board[2]}"/>
         
-        <Button Grid.Row="2" Grid.Column="0" Style="{StaticResource CellStyle}" BorderThickness="0,0,1,1" CommandParameter="1,0" Command="{Binding CellClickCommand}" Content="{Binding GameState.Board[1][0]}"/>
-        <Button Grid.Row="2" Grid.Column="1" Style="{StaticResource CellStyle}" BorderThickness="0,0,1,1" CommandParameter="1,1" Command="{Binding CellClickCommand}" Content="{Binding GameState.Board[1][1]}"/>
-        <Button Grid.Row="2" Grid.Column="2" Style="{StaticResource CellStyle}" BorderThickness="0,0,0,1" CommandParameter="1,2" Command="{Binding CellClickCommand}" Content="{Binding GameState.Board[1][2]}"/>
+        <Button Grid.Row="2" Grid.Column="0" Style="{StaticResource CellStyle}" BorderThickness="0,0,1,1" CommandParameter="3" Command="{Binding CellClickCommand}" Tag="{Binding GameState.Board[3]}"/>
+        <Button Grid.Row="2" Grid.Column="1" Style="{StaticResource CellStyle}" BorderThickness="0,0,1,1" CommandParameter="4" Command="{Binding CellClickCommand}" Tag="{Binding GameState.Board[4]}"/>
+        <Button Grid.Row="2" Grid.Column="2" Style="{StaticResource CellStyle}" BorderThickness="0,0,0,1" CommandParameter="5" Command="{Binding CellClickCommand}" Tag="{Binding GameState.Board[5]}"/>
         
-        <Button Grid.Row="3" Grid.Column="0" Style="{StaticResource CellStyle}" BorderThickness="0,0,1,0" CommandParameter="2,0" Command="{Binding CellClickCommand}" Content="{Binding GameState.Board[2][0]}"/>
-        <Button Grid.Row="3" Grid.Column="1" Style="{StaticResource CellStyle}" BorderThickness="0,0,1,0" CommandParameter="2,1" Command="{Binding CellClickCommand}" Content="{Binding GameState.Board[2][1]}"/>
-        <Button Grid.Row="3" Grid.Column="2" Style="{StaticResource CellStyle}" BorderThickness="0,0,0,0" CommandParameter="2,2" Command="{Binding CellClickCommand}" Content="{Binding GameState.Board[2][2]}"/>
+        <Button Grid.Row="3" Grid.Column="0" Style="{StaticResource CellStyle}" BorderThickness="0,0,1,0" CommandParameter="6" Command="{Binding CellClickCommand}" Tag="{Binding GameState.Board[6]}"/>
+        <Button Grid.Row="3" Grid.Column="1" Style="{StaticResource CellStyle}" BorderThickness="0,0,1,0" CommandParameter="7" Command="{Binding CellClickCommand}" Tag="{Binding GameState.Board[7]}"/>
+        <Button Grid.Row="3" Grid.Column="2" Style="{StaticResource CellStyle}" BorderThickness="0,0,0,0" CommandParameter="8" Command="{Binding CellClickCommand}" Tag="{Binding GameState.Board[8]}"/>
     </Grid>
 </Window>

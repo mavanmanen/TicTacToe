@@ -2,8 +2,9 @@
 
 public interface IEngine
 {
-    public event EventHandler<string> OnGameWin;
+    public GameState State { get; }
+    public event EventHandler<Player> OnGameWin;
     public event EventHandler<EventArgs> OnGameOver;
-    public void SetCell(int x, int y);
+    public void SetCell(int index);
     public void Reset();
 }

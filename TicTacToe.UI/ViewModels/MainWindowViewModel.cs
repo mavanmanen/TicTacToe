@@ -8,15 +8,14 @@ namespace TicTacToe.UI.ViewModels;
 public partial class MainWindowViewModel : ObservableObject
 {
     private readonly IEngine _engine;
-    public IGameState GameState { get; }
 
-    public MainWindowViewModel(IEngine engine, IGameState gameState)
+    public GameState GameState => _engine.State;
+
+    public MainWindowViewModel(IEngine engine)
     {
         _engine = engine;
-        _engine.OnGameWin += (_, winner) => ShowGameEndMessageBox("Game Won!", $"Game won by {winner}");
+        _engine.OnGameWin += (_, winner) => ShowGameEndMessageBox("Game Won!", $"Game won by Player {winner:G}");
         _engine.OnGameOver += (_, _) => ShowGameEndMessageBox("Game Over!", "No Winner.");
-
-        GameState = gameState;
     }
     
     private void ShowGameEndMessageBox(string title, string message)
@@ -30,13 +29,10 @@ public partial class MainWindowViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void CellClick(string location)
+    private void CellClick(string indexString)
     {
-        var splitLocation = location.Split(',');
-        var x = int.Parse(splitLocation[0]);
-        var y = int.Parse(splitLocation[1]);
-
-        _engine.SetCell(x, y);
+        var index = int.Parse(indexString);
+        _engine.SetCell(index);
         OnPropertyChanged(nameof(GameState));
     }
 }
