@@ -218,7 +218,7 @@ public class EngineUnitTests
     {
         // Arrange
         Player?[] emptyBoard = [null, null, null, null, null, null, null, null, null];
-        var sut = new Engine()
+        var sut = new Engine
         {
             State =
             {
